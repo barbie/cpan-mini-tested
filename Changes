@@ -5,6 +5,7 @@ Revision history for CPAN-Mini-Tested
 
         - new maintainer: Barbie
         - change file dates changed to meet W3CDTF standards.
+        - removed Build.PL and SIGNATURE.
 
 0.22    2005-04-04
         - fixed misuse of Pod::Coverage tests
