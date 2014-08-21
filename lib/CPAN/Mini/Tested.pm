@@ -15,7 +15,7 @@ use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 sub _dbh {
   my $self = shift;
@@ -33,7 +33,7 @@ sub _connect {
   $database ||= $self->{test_db_file};
 
   $self->{test_db} = DBI->connect(
-    "DBI:SQLite:dbname=".$database, "", "", {
+    "DBI:SQLite2:dbname=".$database, "", "", {
       RaiseError => 1,
       %{$self->{test_db_conn} || { }},
     },

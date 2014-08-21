@@ -1,5 +1,8 @@
 Revision history for Perl extension CPAN::Mini::Tested.
 
+0.15 Sun Jan 23 2005
+	* uses DBD::SQLite2 instead
+
 0.14 Sat Jan 22 2005
         - noted explicit conflict with newer versions of DBD::SQLite
 	- fixed minor bug with trace when downloading test database

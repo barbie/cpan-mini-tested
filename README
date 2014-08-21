@@ -57,11 +57,10 @@ DESCRIPTION
     See the module documentation for more information.
 
 REVISION HISTORY
-    The following changes were made since version 0.13:
+    The following changes were made since version 0.14:
 
-    0.14 Sat Jan 22 2005
-        - noted explicit conflict with newer versions of DBD::SQLite
-	- fixed minor bug with trace when downloading test database
+    0.15 Sun Jan 23 2005
+	* uses DBD::SQLite2 instead
 
     See the Changes file for a detailed revision history.
 

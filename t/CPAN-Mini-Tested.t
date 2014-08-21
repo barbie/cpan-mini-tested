@@ -3,7 +3,7 @@
 use strict;
 use Test::More tests => 30;
 
-use_ok('CPAN::Mini::Tested', 0.12);
+use_ok('CPAN::Mini::Tested', 0.15);
 
 my $self = {
   test_db_file => './t/mock.db',

@@ -10,7 +10,7 @@ my $build = Module::Build->new
        'Cache::Simple::TimedExpiry' => 0.22,
        'CPAN::Mini'                 => 0.32,
        'DBI'                        => 0,
-       'DBD::SQLite'                => '< 1.00',
+       'DBD::SQLite2'               => 0,
        'File::Basename'             => 0,
        'File::Spec::Functions'      => 0,
        'LWP::Simple'                => 0,
@@ -21,7 +21,6 @@ my $build = Module::Build->new
        'Test::More'                 => 0,
      },
      conflicts      => {
-       'DBD::SQLite'                => 1.00,
      },
      create_makefile_pl => 'traditional',
      create_readme      => 0,
