@@ -57,10 +57,11 @@ DESCRIPTION
     See the module documentation for more information.
 
 REVISION HISTORY
-    The following changes were made since version 0.12:
+    The following changes were made since version 0.13:
 
-    0.13 Wed Jan 19 2005
-	- added test_db_exceptions to exempt certain modules
+    0.14 Sat Jan 22 2005
+        - noted explicit conflict with newer versions of DBD::SQLite
+	- fixed minor bug with trace when downloading test database
 
     See the Changes file for a detailed revision history.
 
@@ -78,4 +79,3 @@ SEE ALSO
     CPAN::Mini
 
     CPAN Testers <http://testers.cpan.org>
-

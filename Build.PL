@@ -20,6 +20,9 @@ my $build = Module::Build->new
      build_requires => {
        'Test::More'                 => 0,
      },
+     conflicts      => {
+       'DBD::SQLite'                => 1.00,
+     },
      create_makefile_pl => 'traditional',
      create_readme      => 0,
      dist_author        => 'Robert Rothenberg <rrwo at cpan.org>',

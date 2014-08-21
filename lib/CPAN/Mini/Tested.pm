@@ -15,7 +15,7 @@ use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 sub _dbh {
   my $self = shift;
@@ -85,7 +85,7 @@ sub mirror_indices {
     if ($status == RC_OK) {
       $self->trace(" ... updated\n");
     } elsif ($status == RC_NOT_MODIFIED) {
-      $self->trace(' ... up to date\n');
+      $self->trace(" ... up to date\n");
     } else {
       warn "\n$db_src: $status\n";
       return;

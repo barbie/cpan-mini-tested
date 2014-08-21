@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: CPAN-Mini-Tested
-version: 0.13
+version: 0.14
 author:
   - Robert Rothenberg <rrwo at cpan.org>
 abstract: |-
@@ -18,8 +18,10 @@ requires:
   perl: 5.6.1
 build_requires:
   Test::More: 0
+conflicts:
+  DBD::SQLite: 1
 provides:
   CPAN::Mini::Tested:
     file: lib/CPAN/Mini/Tested.pm
-    version: 0.13
+    version: 0.14
 generated_by: Module::Build version 0.2607
