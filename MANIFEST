@@ -1,4 +1,3 @@
-Build.PL
 Changes
 Makefile.PL
 MANIFEST
@@ -10,4 +9,3 @@ t/pod-coverage.t
 t/pod.t
 t/prereqs.t
 lib/CPAN/Mini/Tested.pm
-SIGNATURE    Added here by Module::Build
