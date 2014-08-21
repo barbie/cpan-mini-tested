@@ -16,7 +16,7 @@ use File::Spec::Functions qw( catfile );
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 use Regexp::Assemble 0.06;
 
-our $VERSION = '0.16';
+our $VERSION = '0.20';
 
 sub _dbh {
   my $self = shift;
@@ -33,21 +33,23 @@ sub _connect {
 
   $database ||= $self->{test_db_file};
 
-  # We could be fancy and test to see if DBD::SQLite2 is not present,
-  # and look to see if a version of DBD::SQLite < 1.00 is there, but
-  # it's just not worth the effort.
+  unless (-r $database) {
+    die "Cannot find database file";
+  }
 
   $self->{test_db} = DBI->connect(
-    "DBI:SQLite2:dbname=".$database, "", "", {
+    "DBI:SQLite:dbname=".$database, "", "", {
       RaiseError => 1,
       %{$self->{test_db_conn} || { }},
     },
   ) or die "Unable to connect: ", $DBI::errstr;
 
+  # TODO: support for additional reports fields such as perl version
+
   $self->{test_db_sth} =
     $self->_dbh->prepare( qq{
       SELECT COUNT(id) FROM reports
-      WHERE action='PASS' AND distversion=? AND platform=?
+      WHERE status='PASS' AND distribution=? AND version=? AND osname=?
   }) or die "Unable to create prepare statement: ", $self->_dbh->errstr;
 
   return 1;
@@ -72,6 +74,10 @@ sub file_allowed {
 sub mirror_indices {
   my $self = shift;
 
+  if (defined $self->{test_db_arch}) {
+    warn "test_db_arch is deprecated";
+  }
+
   $self->{test_db_file} ||= catfile($self->{local}, 'testers.db');
   my $local_file = $self->{test_db_file};
 
@@ -80,8 +86,9 @@ sub mirror_indices {
   my $test_db_age = $self->{test_db_age};
      $test_db_age = 1, unless (defined $test_db_age);
 
-  if ( ($self->{force}) || (($test_db_age >= 0) &&
-       (-e $local_file) && ((-M $local_file) > $test_db_age)) ){
+  if ( ($self->{force}) || (!-e $local_file) ||
+       (($test_db_age >= 0) &&
+	(-e $local_file) && ((-M $local_file) > $test_db_age)) ){
     $self->trace('testers.db');
     my $db_src = $self->{test_db_src} ||
       'http://testers.cpan.org/testers.db';
@@ -109,10 +116,15 @@ sub clean_unmirrored {
 }
 
 sub _check_db {
-  my ($self, $distver, $arch) = @_;
+  my ($self, $dist, $ver, $osname) = @_;
 
-  $self->_sth->execute($distver, $arch);
-  my $row = $self->_sth->fetch;
+  my $sth = $self->_sth;
+  unless ($sth) {
+    die "Not connected to the database\n";
+  }
+
+  $sth->execute($dist, $ver, $osname);
+  my $row = $sth->fetch;
 
   if ($row) { return $row->[0]; } else { return 0; }
 }
@@ -136,15 +148,26 @@ sub _passed {
   }
 
   if ($self->{test_db_exceptions}) {
-    my $re = new Regexp::Assemble;
 
-    if (ref($self->{test_db_exceptions}) eq "ARRAY") {
-      $re->add( @{ $self->{test_db_exceptions} } );
+    if (ref($self->{test_db_exceptions}) eq "CODE") {
+      return 1, if ( &{ $self->{test_db_exceptions} }($path) );
     }
     else {
-      $re->add( $self->{test_db_exceptions} );
+
+      my $re = new Regexp::Assemble;
+
+      if (ref($self->{test_db_exceptions}) eq "ARRAY") {
+	$re->add( @{ $self->{test_db_exceptions} } );
+      } elsif ( (!ref($self->{test_db_exceptions})) || 
+		(ref($self->{test_db_exceptions}) eq "Regexp") ) {
+	$re->add( $self->{test_db_exceptions} );
+      } else {
+	die "Unknown test_db_exception type: ",
+	  ref($self->{test_db_exceptions});
+      }
+
+      return 1, if ($path =~ $re->re);
     }
-    return ($path =~ $re->re);
   }
 
   if ($self->{test_db_cache}->has_key($path)) {
@@ -156,22 +179,30 @@ sub _passed {
   my $distver = basename($path);
   $distver =~ s/\.(tar\.gz|tar\.bz2|zip)$//;
 
-  $self->{test_db_arch} ||= $Config{archname};
+  my $x       = rindex($distver, '-');
+  my $dist    = substr($distver, 0, $x);
+  my $ver     = substr($distver, $x+1);
 
-  if (ref($self->{test_db_arch}) eq 'ARRAY') {
-    my @archs = @{ $self->{test_db_arch} };
+  $self->{test_db_os} ||= $Config{osname};
+
+  if (ref($self->{test_db_os}) eq 'ARRAY') {
+    my @archs = @{ $self->{test_db_os} };
     while ( (!$count) && (my $arch = shift @archs) ) {
-      $count += $self->_check_db($distver, $arch);
+      $count += $self->_check_db($dist, $ver, $arch);
     }
   }
   else {
-    $count += $self->_check_db($distver, $self->{test_db_arch});
+    $count += $self->_check_db($dist, $ver, $self->{test_db_os});
   }
 
   $self->{test_db_cache}->set($path, $count);
 
   return $count;
 }
+
+# TODO: if filtering in CPAN::Mini is changed to allow paths to be
+# munged, then we can add the option to fall back to the latest
+# version which passes tests.
 
 sub _filter_module {
   my ($self, $args) = @_;
@@ -215,11 +246,15 @@ The following additional options are supported:
 
 =item test_db_exceptions
 
-A Regexp or array of Regexps of module paths that will be included in
-the mirror even if there are no passed tests for them.
+A Regexp or array of Regexps (or Regexp strings) of module paths that
+will be included in the mirror even if there are no passed tests for
+them.
 
-Note that if these modules are already in the exclusion list, then
-they will not be included.
+If it is a code reference, then it refers to a subroutine which takes
+the module path as an argument and returns true if it is an exception.
+
+Note that if these modules are already in the exclusion list used by
+L<CPAN::Mini>, then they will not be included.
 
 =item test_db_age
 
@@ -243,10 +278,10 @@ L<http://testers.cpan.org/testers.db>.
 The location of the local copy of the testers database. Defaults to
 the root directory of C<local>.
 
-=item test_db_arch
+=item test_db_os
 
 The platform that tests are expected to pass.  Defaults to the current
-platform C<$Config{archname}>.
+platform C<$Config{osname}>.
 
 If this is set to a list of platforms (an array reference), then it
 expects tests on any one of those platforms to pass.  This is useful
@@ -295,6 +330,8 @@ at your option, any later version of Perl 5 you may have available.
 =head1 SEE ALSO
 
 L<CPAN::Mini>
+
+L<CPAN::WWW::Testers>
 
 CPAN Testers L<http://testers.cpan.org>
 

@@ -1,13 +1,15 @@
 #!/usr/bin/perl
 
-use strict;
-use Test::More tests => 30;
+# TODO: test warning for setting test_db_arch
 
-use_ok('CPAN::Mini::Tested', 0.15);
+use strict;
+use Test::More tests => 32;
+
+use_ok('CPAN::Mini::Tested', 0.20);
 
 my $self = {
   test_db_file => './t/mock.db',
-  test_db_arch => 'PA-RISC1.1',
+  test_db_os   => 'hpux',
   test_db_conn => { RaiseError => 1, PrintError => 1, },
   trace        => 0,
 };
@@ -32,7 +34,7 @@ ok(!$self->_filter_module({
 
 ok($self->_passed('HTML-EP-Explorer-0.1004'));
 
-$self->{test_db_arch}   = 'sun4-solaris';
+$self->{test_db_os}   = 'solaris';
 $self->_reset_cache;
 
 ok($self->_filter_module({
@@ -51,7 +53,7 @@ ok($self->_filter_module({
 
 ok(!$self->_passed('HTML-EP-Explorer-0.1004'));
 
-$self->{test_db_arch}   = [qw( sun4-solaris )];
+$self->{test_db_os}   = [qw( solaris )];
 $self->_reset_cache;
 
 ok($self->_filter_module({
@@ -70,7 +72,7 @@ ok($self->_filter_module({
 
 ok(!$self->_passed('HTML-EP-Explorer-0.1004'));
 
-$self->{test_db_arch}   = [qw( sun4-solaris PA-RISC1.1 )];
+$self->{test_db_os}   = [qw( solaris hpux )];
 $self->_reset_cache;
 
 ok($self->_filter_module({
@@ -89,7 +91,7 @@ ok(!$self->_filter_module({
 
 ok($self->_passed('HTML-EP-Explorer-0.1004'));
 
-$self->{test_db_arch}   = 'NonExistentArch';
+$self->{test_db_os}   = 'NonExistentOS';
 $self->_reset_cache;
 
 ok($self->_filter_module({
@@ -108,7 +110,7 @@ ok($self->_filter_module({
 
 ok(!$self->_passed('HTML-EP-Explorer-0.1004'));
 
-$self->{test_db_arch}   = [qw( NonExistentArch PA-RISC1.1 )];
+$self->{test_db_os}   = [qw( NonExistentOS hpux )];
 $self->_reset_cache;
 
 ok($self->_filter_module({
@@ -126,8 +128,14 @@ ok(!$self->_filter_module({
 }), "module_filters skip not-pass");
 
 ok($self->_passed('HTML-EP-Explorer-0.1004'));
+
+$self->{test_db_exceptions} = qr/foobar/;
+ok(!$self->_passed('FCGI-0.48'));
 
 $self->{test_db_exceptions} = qr/FCGI/;
+ok($self->_passed('FCGI-0.48'));
+
+$self->{test_db_exceptions} = sub { shift =~ qr/FCGI/ };
 ok($self->_passed('FCGI-0.48'));
 
 $self->{test_db_exceptions} = [ qr/FCGI/, ];

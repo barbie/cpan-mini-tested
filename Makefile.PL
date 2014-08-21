@@ -7,7 +7,7 @@ WriteMakefile
           'PREREQ_PM' => {
                            'CPAN::Mini' => '0.32',
                            'Cache::Simple::TimedExpiry' => '0.22',
-                           'DBD::SQLite2' => '0',
+                           'DBD::SQLite' => '1',
                            'DBI' => '0',
                            'File::Basename' => '0',
                            'File::Spec::Functions' => '0',

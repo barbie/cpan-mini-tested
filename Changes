@@ -1,6 +1,17 @@
 Revision history for Perl extension CPAN::Mini::Tested. (Possible
 incompatabilities are marked with an asterisk -- '*')
 
+0.20 Sun Feb  6 2005
+	- updated POD accordingly
+	- test_db_exceptions can be a coderef [rt.cpan.org #11197]
+	- corrected bug in test exceptions
+	* changes for updated CPAN Testers database format
+	* no longer uses test_db_arch option, renamed to test_db_os
+          because of changes in format of testers database
+	- warnings when using test_db_arch option
+	- trap error when database file is missing [rt.cpan.org #11390]
+	- download database file if it is missing
+
 0.16 Mon Jan 24 2005
 	* uses Regexp::Assemble to combine regular expressions
 	- updated internal code, comments
