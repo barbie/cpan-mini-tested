@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use Test::More tests => 27;
+use Test::More tests => 30;
 
 use_ok('CPAN::Mini::Tested', 0.12);
 
@@ -127,6 +127,14 @@ ok(!$self->_filter_module({
 
 ok($self->_passed('HTML-EP-Explorer-0.1004'));
 
+$self->{test_db_exceptions} = qr/FCGI/;
+ok($self->_passed('FCGI-0.48'));
+
+$self->{test_db_exceptions} = [ qr/FCGI/, ];
+ok($self->_passed('FCGI-0.48'));
+
+$self->{test_db_exceptions} = [ qr/foobar/, qr/FCGI/, ];
+ok($self->_passed('FCGI-0.48'));
 
 ok($self->_disconnect);
 

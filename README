@@ -57,15 +57,10 @@ DESCRIPTION
     See the module documentation for more information.
 
 REVISION HISTORY
-    The following changes were made since version 0.11:
+    The following changes were made since version 0.12:
 
-    0.12 Mon Jan 10 2005
-	- CPAN::Mini filters checked before database queried
-	- uses Cache::Simple::TimedExpiry to cache databse queries for
-	  a limited time
-	- added option to configure expiration time
-	- updated documentation
-	- added more tests
+    0.13 Wed Jan 19 2005
+	- added test_db_exceptions to exempt certain modules
 
     See the Changes file for a detailed revision history.
 

@@ -15,7 +15,7 @@ use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 sub _dbh {
   my $self = shift;
@@ -130,6 +130,21 @@ sub _passed {
     $self->_reset_cache;
   }
 
+  if ($self->{test_db_exceptions}) {
+    if (ref($self->{test_db_exceptions}) eq "ARRAY") {
+      foreach my $re (@{ $self->{test_db_exceptions} }) {
+	die "Expected Regexp",
+	  unless (ref($re) eq 'Regexp');
+	return 1, if ($path =~ $re);
+      }
+    }
+    else {
+      die "Expected Regexp",
+	unless (ref($self->{test_db_exceptions}) eq 'Regexp');
+      return ($path =~ $self->{test_db_exceptions});
+    }
+  }
+
   if ($self->{test_db_cache}->has_key($path)) {
     return $self->{test_db_cache}->fetch($path);
   }
@@ -195,6 +210,14 @@ before applying other filtering rules to it.
 The following additional options are supported:
 
 =over
+
+=item test_db_exceptions
+
+A Regexp or array of Regexps of module paths that will be included in
+the mirror even if there are no passed tests for them.
+
+Note that if these modules are already in the exclusion list, then
+they will not be included.
 
 =item test_db_age
 

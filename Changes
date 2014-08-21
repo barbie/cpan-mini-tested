@@ -1,5 +1,8 @@
 Revision history for Perl extension CPAN::Mini::Tested.
 
+0.13 Wed Jan 19 2005
+	- added test_db_exceptions to exempt certain modules
+
 0.12 Mon Jan 10 2005
 	- CPAN::Mini filters checked before database queried
 	- uses Cache::Simple::TimedExpiry to cache databse queries for
