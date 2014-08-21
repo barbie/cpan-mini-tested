@@ -1,5 +1,21 @@
 Revision history for Perl extension CPAN::Mini::Tested.
 
+0.10 Sun Jan  9 2005
+	- updated documentation
+	- can filter by multiple platforms
+	- added tests
+	- added some error handling
+	- fixed minor bug with trace
+	- passed can parse non-tar.gz paths
+	- various internal tweaks
+	- force option forces download of testers db
+	- added test_db_arch option
+	- added test_db_age option
+	- added test_db_file option
+        - added test_db_conn option
+	- added test_db_src option
+	- added redid some changed internal structure
+
 0.02
 	- fixed CPAN::Mini version required
 

@@ -17,9 +17,10 @@ my $build = Module::Build->new
      recommends => {
      },
      build_requires => {
+       'Test::More'                 => 0,
      },
      create_makefile_pl => 'traditional',
-     create_readme      => 1,
+     create_readme      => 0,
      dist_author        => 'Robert Rothenberg <rrwo at cpan.org>',
      sign               => 1,
 );

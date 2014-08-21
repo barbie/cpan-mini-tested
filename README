@@ -2,6 +2,38 @@ NAME
     CPAN::Mini::Tested - create a CPAN mirror using modules that have passed
     tests
 
+REQUIREMENTS
+    This module is designed for Perl 5.6.1. The following non-core
+    modules are required:
+
+      CPAN::Mini
+      DBI
+      DBD::SQLite *
+      LWP
+
+    * DBD::SQLite 1.00 or later uses a different database format that
+      incompatible with the CPAN Testers database.
+
+Installation
+    Installation can be done using the traditional Makefile.PL or the
+    newer Build.PL methods.
+
+    Using Makefile.PL:
+
+      perl Makefile.PL
+      make
+      make test
+      make install
+
+    (On Windows platforms you should use nmake instead.)
+
+    Using Build.PL (if you have Module::Build installed):
+
+      perl Build.PL
+      perl Build
+      perl Build test
+      perl Build install
+
 SYNOPSYS
       use CPAN::Mini::Tested;
 
@@ -17,19 +49,32 @@ DESCRIPTION
     Distributions will only be downloaded if there are passing tests.
 
     The major differences are that it will download the testers.db file from
-    the CPAN Testers web site when updating indices.
+    the CPAN Testers web site when updating indices, and it will check if a
+    distribution has passed tests in the specified platform before applying
+    other filtering rules to it.
 
-CAVEATS
-    This is a prototype module, which will need further work before using in
-    a production environment.
+    See the module documentation for more information.
 
-    This module is only of use if there are active testers for your
-    platform.
+REVISION HISTORY
+    The following changes were made since version 0.02:
 
-    Note that the lack of passing tests in the testers database does not
-    mean that a module will not run on your platform, only that it will not
-    be downloded. Likewise, passing tests do not mean that a module will run
-    on your platform.
+    0.10 Sun Jan  9 2005
+	- updated documentation
+	- can filter by multiple platforms
+	- added tests
+	- added some error handling
+	- fixed minor bug with trace
+	- passed can parse non-tar.gz paths
+	- various internal tweaks
+	- force option forces download of testers db
+	- added test_db_arch option
+	- added test_db_age option
+	- added test_db_file option
+        - added test_db_conn option
+	- added test_db_src option
+	- added redid some changed internal structure
+
+    See the Changes file for a detailed revision history.
 
 AUTHOR
     Robert Rothenberg <rrwo at cpan.org>
