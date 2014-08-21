@@ -17,7 +17,7 @@ use File::Spec::Functions qw( catfile );
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 use Regexp::Assemble 0.06;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 sub _dbh {
   my $self = shift;
@@ -302,6 +302,32 @@ that contain multiple modules. (Older versions of CPAN::Mini will
 check the filters multiple times per module.)  Caching the results
 improves performance, but we need to maintain the results for very
 long, nor do we want all of the results to use memory.
+
+=back
+
+=head2 Subclassed Methods
+
+The following methods are subclasses from L<CPAN::Mini>:
+
+=over
+
+=item _filter_module
+
+In addition to noting if a module is in the exclusion list, it also
+notes if it has not passed any tests.
+
+=item mirror_indices
+
+Downloads the latest F<testers.db> database file (if needed) and
+connects to the database before it begins downloading indices.
+
+=item file_allowed
+
+Also notes if the file is the F<testers.db> databse file.
+
+=item clean_unmirrored
+
+Disconnects from the database before cleaning files.
 
 =back
 

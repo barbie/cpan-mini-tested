@@ -1,6 +1,10 @@
 Revision history for Perl extension CPAN::Mini::Tested. (Possible
 incompatabilities are marked with an asterisk -- '*')
 
+0.22 Mon Apr  4 2005
+	- fixed misuse of Pod::Coverage tests
+	- documented inherited methods
+
 0.21 Thu Mar 31 2005
 	- minor documentation tweaks
 	- added DSLIP info to POD

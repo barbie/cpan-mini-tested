@@ -57,14 +57,9 @@ DESCRIPTION
 REVISION HISTORY
     The following changes were made since the previous public release:
 
-    0.21 Thu Mar 31 2005
-	- minor documentation tweaks
-	- added DSLIP info to POD
-	- added Test::Prereq test
-	- added Test::Pod test
-	- added Pod::Coverage test
-	- module explicitly uses DBD::SQLite 1.00+
-	- corrected typo in README
+    0.22 Mon Apr  4 2005
+	- fixed misuse of Pod::Coverage tests
+	- documented inherited methods
 
     See the Changes file for a detailed revision history.
 

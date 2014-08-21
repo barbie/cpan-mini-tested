@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: CPAN-Mini-Tested
-version: 0.21
+version: 0.22
 author:
   - Robert Rothenberg <rrwo at cpan.org>
 abstract: |-
@@ -26,5 +26,5 @@ build_requires:
 provides:
   CPAN::Mini::Tested:
     file: lib/CPAN/Mini/Tested.pm
-    version: 0.21
+    version: 0.22
 generated_by: Module::Build version 0.2607
