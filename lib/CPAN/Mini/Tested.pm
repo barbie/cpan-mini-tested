@@ -13,7 +13,7 @@ use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 sub _dbh {
   my $self = shift;
@@ -65,8 +65,8 @@ sub file_allowed {
 sub mirror_indices {
   my $self = shift;
 
-  my $local_file = $self->{test_db_file} ||
-    catfile($self->{local}, 'testers.db');
+  $self->{test_db_file} ||= catfile($self->{local}, 'testers.db');
+  my $local_file = $self->{test_db_file};
 
   # test_db_age < 0, do not update it
 

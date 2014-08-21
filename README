@@ -58,6 +58,9 @@ DESCRIPTION
 REVISION HISTORY
     The following changes were made since version 0.02:
 
+    0.11 Sun Jan  9 2005
+	- fixed bug with finding local file
+
     0.10 Sun Jan  9 2005
 	- updated documentation
 	- can filter by multiple platforms
