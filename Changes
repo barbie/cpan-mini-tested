@@ -1,6 +1,15 @@
 Revision history for Perl extension CPAN::Mini::Tested. (Possible
 incompatabilities are marked with an asterisk -- '*')
 
+0.21 Thu Mar 31 2005
+	- minor documentation tweaks
+	- added DSLIP info to POD
+	- added Test::Prereq test
+	- added Test::Pod test
+	- added Pod::Coverage test
+	- module explicitly uses DBD::SQLite 1.00+
+	- corrected typo in README
+
 0.20 Sun Feb  6 2005
 	- updated POD accordingly
 	- test_db_exceptions can be a coderef [rt.cpan.org #11197]

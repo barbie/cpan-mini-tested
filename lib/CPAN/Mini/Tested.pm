@@ -9,6 +9,7 @@ use Cache::Simple::TimedExpiry 0.22;
 
 use Config;
 use DBI;
+use DBD::SQLite 1.00;
 
 use File::Basename qw( basename );
 use File::Spec::Functions qw( catfile );
@@ -16,7 +17,7 @@ use File::Spec::Functions qw( catfile );
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 use Regexp::Assemble 0.06;
 
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 
 sub _dbh {
   my $self = shift;
@@ -314,6 +315,20 @@ mean that a module will not run on your platform, only that it will
 not be downloded. (There may be a lag of several days before test
 results of the newest modules appear in the database.)  Likewise,
 passing tests do not mean that a module will run on your platform.
+
+If the way filters are handled in CPAN::Mini is changed in the future,
+then some of these issues can be resolved by downloading the most
+recent version which has passed tests.
+
+=head1 DSLIP
+
+  b - Beta testing
+  d - Developer
+  p - Perl-only
+  O - Object oriented
+  p - Standard Perl
+
+See L<http://cpan.uwinnipeg.ca/htdocs/faqs/dslip.html>
 
 =head1 AUTHOR
 

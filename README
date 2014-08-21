@@ -9,8 +9,9 @@ REQUIREMENTS
       Cache::Simple::TimedExpiry
       CPAN::Mini
       DBI
-      DBD::SQLite2
+      DBD::SQLite
       LWP
+      Regexp::Assemble
 
 Installation
     Installation can be done using the traditional Makefile.PL or the
@@ -54,20 +55,27 @@ DESCRIPTION
     See the module documentation for more information.
 
 REVISION HISTORY
-    The following changes were made since the previous version:
+    The following changes were made since the previous public release:
 
-    0.20 Sun Feb  6 2005
-	- updated POD accordingly
-	- test_db_exceptions can be a coderef [rt.cpan.org #11197]
-	- corrected bug in test exceptions
-	* changes for updated CPAN Testers database format
-	* no longer uses test_db_arch option, renamed to test_db_os
-          because of changes in format of testers database
-	- warnings when using test_db_arch option
-	- trap error when database file is missing
-	- download database file if it is missing
+    0.21 Thu Mar 31 2005
+	- minor documentation tweaks
+	- added DSLIP info to POD
+	- added Test::Prereq test
+	- added Test::Pod test
+	- added Pod::Coverage test
+	- module explicitly uses DBD::SQLite 1.00+
+	- corrected typo in README
 
     See the Changes file for a detailed revision history.
+
+DSLIP
+  b - Beta testing
+  d - Developer
+  p - Perl-only
+  O - Object oriented
+  p - Standard Perl
+
+See <http://cpan.uwinnipeg.ca/htdocs/faqs/dslip.html>
 
 AUTHOR
     Robert Rothenberg <rrwo at cpan.org>

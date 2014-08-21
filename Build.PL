@@ -17,6 +17,9 @@ my $build = Module::Build->new
        'Regexp::Assemble'           => 0.06,
      },
      recommends => {
+       'Pod::Coverage'              => 0,
+       'Test::Pod'                  => 1.00,
+       'Test::Prereq'               => 0,
      },
      build_requires => {
        'Test::More'                 => 0,
