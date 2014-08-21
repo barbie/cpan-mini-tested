@@ -1,4 +1,10 @@
-Revision history for Perl extension CPAN::Mini::Tested.
+Revision history for Perl extension CPAN::Mini::Tested. (Possible
+incompatabilities are marked with an asterisk -- '*')
+
+0.16 Mon Jan 24 2005
+	* uses Regexp::Assemble to combine regular expressions
+	- updated internal code, comments
+	- fixed typo in README regarding requirements
 
 0.15 Sun Jan 23 2005
 	* uses DBD::SQLite2 instead

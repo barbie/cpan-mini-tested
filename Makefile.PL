@@ -12,6 +12,7 @@ WriteMakefile
                            'File::Basename' => '0',
                            'File::Spec::Functions' => '0',
                            'LWP::Simple' => '0',
+                           'Regexp::Assemble' => '0.06',
                            'Test::More' => '0',
                            'base' => '0'
                          },

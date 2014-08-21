@@ -14,8 +14,9 @@ use File::Basename qw( basename );
 use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
+use Regexp::Assemble 0.06;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 sub _dbh {
   my $self = shift;
@@ -31,6 +32,10 @@ sub _connect {
   my ($self, $database)  = @_;
 
   $database ||= $self->{test_db_file};
+
+  # We could be fancy and test to see if DBD::SQLite2 is not present,
+  # and look to see if a version of DBD::SQLite < 1.00 is there, but
+  # it's just not worth the effort.
 
   $self->{test_db} = DBI->connect(
     "DBI:SQLite2:dbname=".$database, "", "", {
@@ -131,18 +136,15 @@ sub _passed {
   }
 
   if ($self->{test_db_exceptions}) {
+    my $re = new Regexp::Assemble;
+
     if (ref($self->{test_db_exceptions}) eq "ARRAY") {
-      foreach my $re (@{ $self->{test_db_exceptions} }) {
-	die "Expected Regexp",
-	  unless (ref($re) eq 'Regexp');
-	return 1, if ($path =~ $re);
-      }
+      $re->add( @{ $self->{test_db_exceptions} } );
     }
     else {
-      die "Expected Regexp",
-	unless (ref($self->{test_db_exceptions}) eq 'Regexp');
-      return ($path =~ $self->{test_db_exceptions});
+      $re->add( $self->{test_db_exceptions} );
     }
+    return ($path =~ $re->re);
   }
 
   if ($self->{test_db_cache}->has_key($path)) {

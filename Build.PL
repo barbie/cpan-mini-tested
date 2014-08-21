@@ -14,6 +14,7 @@ my $build = Module::Build->new
        'File::Basename'             => 0,
        'File::Spec::Functions'      => 0,
        'LWP::Simple'                => 0,
+       'Regexp::Assemble'           => 0.06,
      },
      recommends => {
      },

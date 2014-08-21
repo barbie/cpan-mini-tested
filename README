@@ -9,11 +9,8 @@ REQUIREMENTS
       Cache::Simple::TimedExpiry
       CPAN::Mini
       DBI
-      DBD::SQLite *
+      DBD::SQLite2
       LWP
-
-    * DBD::SQLite 1.00 or later uses a different database format that
-      incompatible with the CPAN Testers database.
 
 Installation
     Installation can be done using the traditional Makefile.PL or the
@@ -57,10 +54,12 @@ DESCRIPTION
     See the module documentation for more information.
 
 REVISION HISTORY
-    The following changes were made since version 0.14:
+    The following changes were made since the previous version:
 
-    0.15 Sun Jan 23 2005
-	* uses DBD::SQLite2 instead
+    0.16 Mon Jan 24 2005
+	* uses Regexp::Assemble to combine regular expressions
+	- updated internal code, comments
+	- fixed typo in README regarding requirements
 
     See the Changes file for a detailed revision history.
 
