@@ -70,7 +70,7 @@ use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub _connect {
   my ($self, $database)  = @_;

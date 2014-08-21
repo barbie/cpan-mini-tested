@@ -1,13 +1,13 @@
 --- #YAML:1.0
 name: CPAN-Mini-Tested
-version: 0.01
+version: 0.02
 author:
   - Robert Rothenberg <rrwo at cpan.org>
 abstract: |-
   create a CPAN mirror using modules that have passed tests
 license: perl
 requires:
-  CPAN::Mini: 0.321
+  CPAN::Mini: 0.32
   DBD::SQLite: '< 1.00'
   DBI: 0
   File::Basename: 0
@@ -18,5 +18,5 @@ requires:
 provides:
   CPAN::Mini::Tested:
     file: lib/CPAN/Mini/Tested.pm
-    version: 0.01
+    version: 0.02
 generated_by: Module::Build version 0.2607
