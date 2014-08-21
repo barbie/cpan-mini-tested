@@ -6,6 +6,7 @@ WriteMakefile
           'VERSION_FROM' => 'lib/CPAN/Mini/Tested.pm',
           'PREREQ_PM' => {
                            'CPAN::Mini' => '0.32',
+                           'Cache::Simple::TimedExpiry' => '0.22',
                            'DBD::SQLite' => '< 1.00',
                            'DBI' => '0',
                            'File::Basename' => '0',

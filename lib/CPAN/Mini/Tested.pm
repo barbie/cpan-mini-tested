@@ -5,6 +5,8 @@ use 5.006;
 use strict;
 use warnings;
 
+use Cache::Simple::TimedExpiry 0.22;
+
 use Config;
 use DBI;
 
@@ -13,7 +15,7 @@ use File::Spec::Functions qw( catfile );
 
 use LWP::Simple qw(mirror RC_OK RC_NOT_MODIFIED);
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 sub _dbh {
   my $self = shift;
@@ -110,18 +112,29 @@ sub _check_db {
   if ($row) { return $row->[0]; } else { return 0; }
 }
 
+sub _reset_cache {
+  my $self = shift;
+  $self->{test_db_cache} = undef, if ($self->{test_db_cache});
+  $self->{test_db_cache} = new Cache::Simple::TimedExpiry;
+  $self->{test_db_cache}->expire_after($self->{test_db_cache_expiry} || 300);
+}
 
 sub _passed {
   my ($self, $path) = @_;
 
-  # Test results are cached because the filter routine is called
-  # several times for each module, at least in CPAN::Mini 0.32
+  # CPAN::Mini 0.36 no longer calls the filter routine multiple times
+  # per module, but it will for packages with multiple modules. So we
+  # cache the results, but only for a limited time.
 
-  if (exists $self->{test_db_passed}->{$path}) {
-    return $self->{test_db_passed}->{$path};
+  unless (defined $self->{test_db_cache}) {
+    $self->_reset_cache;
   }
 
-  $self->{test_db_passed}->{$path} = 0;
+  if ($self->{test_db_cache}->has_key($path)) {
+    return $self->{test_db_cache}->fetch($path);
+  }
+
+  my $count = 0;
 
   my $distver = basename($path);
   $distver =~ s/\.(tar\.gz|tar\.bz2|zip)$//;
@@ -130,24 +143,23 @@ sub _passed {
 
   if (ref($self->{test_db_arch}) eq 'ARRAY') {
     my @archs = @{ $self->{test_db_arch} };
-    while ( (!$self->{test_db_passed}->{$path}) &&
-	    (my $arch = shift @archs) ) {
-      $self->{test_db_passed}->{$path} +=
-	$self->_check_db($distver, $arch);
+    while ( (!$count) && (my $arch = shift @archs) ) {
+      $count += $self->_check_db($distver, $arch);
     }
   }
   else {
-    $self->{test_db_passed}->{$path} +=
-      $self->_check_db($distver, $self->{test_db_arch});
+    $count += $self->_check_db($distver, $self->{test_db_arch});
   }
 
-  return $self->{test_db_passed}->{$path};
+  $self->{test_db_cache}->set($path, $count);
+
+  return $count;
 }
 
 sub _filter_module {
   my ($self, $args) = @_;
-  return 1 unless $self->_passed($args->{path});
-  return CPAN::Mini::_filter_module($self, $args);
+  return CPAN::Mini::_filter_module($self, $args)
+    || (!$self->_passed($args->{path}));
 }
 
 1;
@@ -220,12 +232,19 @@ where there tests are similar platforms are acceptable.
 
 Connection parameters for L<DBI>. In most cases these can be ignored.
 
+=item test_db_cache_expiry
+
+The number of seconds it caches database queries. Defaults to C<300>.
+
+CPAN::Mini will check the filters multiple times for distributions
+that contain multiple modules. (Older versions of CPAN::Mini will
+check the filters multiple times per module.)  Caching the results
+improves performance, but we need to maintain the results for very
+long, nor do we want all of the results to use memory.
+
 =back
 
 =head1 CAVEATS
-
-This is a prototype module, which will need further work before using
-in a production environment.
 
 This module is only of use if there are active testers for your
 platform.

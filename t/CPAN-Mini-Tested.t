@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
 use strict;
-use Test::More tests => 23;
+use Test::More tests => 27;
 
-use_ok('CPAN::Mini::Tested', 0.10);
+use_ok('CPAN::Mini::Tested', 0.12);
 
 my $self = {
   test_db_file => './t/mock.db',
@@ -33,7 +33,7 @@ ok(!$self->_filter_module({
 ok($self->_passed('HTML-EP-Explorer-0.1004'));
 
 $self->{test_db_arch}   = 'sun4-solaris';
-$self->{test_db_passed} = undef;           # clear cache of test results
+$self->_reset_cache;
 
 ok($self->_filter_module({
   module  => 'FCGI',
@@ -52,7 +52,7 @@ ok($self->_filter_module({
 ok(!$self->_passed('HTML-EP-Explorer-0.1004'));
 
 $self->{test_db_arch}   = [qw( sun4-solaris )];
-$self->{test_db_passed} = undef;
+$self->_reset_cache;
 
 ok($self->_filter_module({
   module  => 'FCGI',
@@ -71,7 +71,7 @@ ok($self->_filter_module({
 ok(!$self->_passed('HTML-EP-Explorer-0.1004'));
 
 $self->{test_db_arch}   = [qw( sun4-solaris PA-RISC1.1 )];
-$self->{test_db_passed} = undef;
+$self->_reset_cache;
 
 ok($self->_filter_module({
   module  => 'FCGI',
@@ -90,7 +90,7 @@ ok(!$self->_filter_module({
 ok($self->_passed('HTML-EP-Explorer-0.1004'));
 
 $self->{test_db_arch}   = 'NonExistentArch';
-$self->{test_db_passed} = undef;
+$self->_reset_cache;
 
 ok($self->_filter_module({
   module  => 'FCGI',
@@ -107,6 +107,26 @@ ok($self->_filter_module({
 }), "module_filters skip not-pass");
 
 ok(!$self->_passed('HTML-EP-Explorer-0.1004'));
+
+$self->{test_db_arch}   = [qw( NonExistentArch PA-RISC1.1 )];
+$self->_reset_cache;
+
+ok($self->_filter_module({
+  module  => 'FCGI',
+  version => '0.48',
+  path    => 'FCGI-0.48',
+}), "module_filters skip not-pass");
+
+ok(!$self->_passed('FCGI-0.48'));
+
+ok(!$self->_filter_module({
+  module  => 'HTML-EP-Explorer',
+  version => '0.1004',
+  path    => 'HTML-EP-Explorer-0.1004',
+}), "module_filters skip not-pass");
+
+ok($self->_passed('HTML-EP-Explorer-0.1004'));
+
 
 ok($self->_disconnect);
 

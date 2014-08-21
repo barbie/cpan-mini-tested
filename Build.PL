@@ -7,11 +7,12 @@ my $build = Module::Build->new
      requires => {
        'perl'                       => '5.6.1',
        'base'                       => 0,
-       'File::Basename'             => 0,
-       'File::Spec::Functions'      => 0,
+       'Cache::Simple::TimedExpiry' => 0.22,
        'CPAN::Mini'                 => 0.32,
        'DBI'                        => 0,
        'DBD::SQLite'                => '< 1.00',
+       'File::Basename'             => 0,
+       'File::Spec::Functions'      => 0,
        'LWP::Simple'                => 0,
      },
      recommends => {

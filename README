@@ -6,6 +6,7 @@ REQUIREMENTS
     This module is designed for Perl 5.6.1. The following non-core
     modules are required:
 
+      Cache::Simple::TimedExpiry
       CPAN::Mini
       DBI
       DBD::SQLite *
@@ -56,26 +57,15 @@ DESCRIPTION
     See the module documentation for more information.
 
 REVISION HISTORY
-    The following changes were made since version 0.02:
+    The following changes were made since version 0.11:
 
-    0.11 Sun Jan  9 2005
-	- fixed bug with finding local file
-
-    0.10 Sun Jan  9 2005
+    0.12 Mon Jan 10 2005
+	- CPAN::Mini filters checked before database queried
+	- uses Cache::Simple::TimedExpiry to cache databse queries for
+	  a limited time
+	- added option to configure expiration time
 	- updated documentation
-	- can filter by multiple platforms
-	- added tests
-	- added some error handling
-	- fixed minor bug with trace
-	- passed can parse non-tar.gz paths
-	- various internal tweaks
-	- force option forces download of testers db
-	- added test_db_arch option
-	- added test_db_age option
-	- added test_db_file option
-        - added test_db_conn option
-	- added test_db_src option
-	- added redid some changed internal structure
+	- added more tests
 
     See the Changes file for a detailed revision history.
 

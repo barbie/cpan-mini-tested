@@ -1,5 +1,13 @@
 Revision history for Perl extension CPAN::Mini::Tested.
 
+0.12 Mon Jan 10 2005
+	- CPAN::Mini filters checked before database queried
+	- uses Cache::Simple::TimedExpiry to cache databse queries for
+	  a limited time
+	- added option to configure expiration time
+	- updated documentation
+	- added more tests
+
 0.11 Sun Jan  9 2005
 	- fixed bug with finding local file
 
@@ -19,7 +27,7 @@ Revision history for Perl extension CPAN::Mini::Tested.
 	- added test_db_src option
 	- added redid some changed internal structure
 
-0.02
+0.02  Thu Jan  6 2005
 	- fixed CPAN::Mini version required
 
 0.01  Thu Jan  6 17:52:53 2005
