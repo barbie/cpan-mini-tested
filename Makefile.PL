@@ -15,7 +15,7 @@ WriteMakefile(
     PREREQ_PM           => {
 
         # prereqs
-        'base'                          => '0'
+        'base'                          => '0',
         'Cache::Simple::TimedExpiry'    => '0.22',
         'CPAN::Mini'                    => '0.32',
         'Config'                        => '0',
