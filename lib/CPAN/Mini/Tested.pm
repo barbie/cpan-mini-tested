@@ -352,7 +352,7 @@ L<CPAN::Mini>
 
 L<CPAN::WWW::Testers>
 
-CPAN Testers L<http://testers.cpan.org>
+CPAN Testers L<http://cpantesters.org>
 
 =head1 AUTHOR
 

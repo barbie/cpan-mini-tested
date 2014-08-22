@@ -12,6 +12,7 @@ Revision history for CPAN-Mini-Tested
         - Removed DSLIP info.
         - updated and extended test suite.
         - updated META.yml, added META.json.
+        - fixed link to CPAN Testers.
 
 0.22    2005-04-04
         - fixed misuse of Pod::Coverage tests
