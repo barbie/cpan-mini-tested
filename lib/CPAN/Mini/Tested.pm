@@ -25,6 +25,12 @@ use File::Spec::Functions       qw( catfile );
 use LWP::Simple                 qw(mirror RC_OK RC_NOT_MODIFIED);
 use Regexp::Assemble            0.06;
 
+###########################################################################
+# Variables
+
+my $TESTDB  = 'testers.db';
+my $TESTURL = 'http://testers.cpan.org/testers.db';
+
 #--------------------------------------------------------------------------
 
 ###########################################################################
@@ -32,7 +38,7 @@ use Regexp::Assemble            0.06;
 
 sub file_allowed {
     my ($self, $file) = @_;
-    return (basename($file) eq 'testers.db') ? 1 :
+    return (basename($file) eq $TESTDB) ? 1 :
         CPAN::Mini::file_allowed($self, $file);
 }
 
@@ -41,7 +47,7 @@ sub mirror_indices {
 
     warn "test_db_arch is deprecated"   if(defined $self->{test_db_arch});
 
-    $self->{test_db_file} ||= catfile($self->{local}, 'testers.db');
+    $self->{test_db_file} ||= catfile($self->{local}, $TESTDB);
     my $local_file = $self->{test_db_file};
 
     # test_db_age < 0, do not update it
@@ -52,8 +58,8 @@ sub mirror_indices {
     if ( ($self->{force}) || (!-e $local_file) ||
         (($test_db_age >= 0) &&
 	     (-e $local_file) && ((-M $local_file) > $test_db_age)) ){
-        $self->trace('testers.db');
-        my $db_src = $self->{test_db_src} || 'http://testers.cpan.org/testers.db';
+        $self->trace($TESTDB);
+        my $db_src = $self->{test_db_src} || $TESTURL;
         my $status = mirror($db_src, $local_file);
 
         if ($status == RC_OK) {
