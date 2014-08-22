@@ -9,6 +9,7 @@ Revision history for CPAN-Mini-Tested
         - reworked Makefile.PL for clarity.
         - switch to Artistic 2 License.
         - Added LICENSE and INSTALL files.
+        - Removed DSLIP info.
 
 0.22    2005-04-04
         - fixed misuse of Pod::Coverage tests

@@ -212,12 +212,12 @@ sub _filter_module {
 }
 
 1;
-__END__
 
+__END__
 
 =head1 NAME
 
-CPAN::Mini::Tested - create a CPAN mirror using modules that have passed tests
+CPAN::Mini::Tested - Create a CPAN mirror using modules with passing test reports
 
 =head1 SYNOPSYS
 
@@ -346,28 +346,6 @@ If the way filters are handled in CPAN::Mini is changed in the future,
 then some of these issues can be resolved by downloading the most
 recent version which has passed tests.
 
-=head1 DSLIP
-
-  b - Beta testing
-  d - Developer
-  p - Perl-only
-  O - Object oriented
-  p - Standard Perl
-
-See L<http://cpan.uwinnipeg.ca/htdocs/faqs/dslip.html>
-
-=head1 AUTHOR
-
-Robert Rothenberg <rrwo at cpan.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2005 by Robert Rothenberg.  All Rights Reserved.
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.3 or,
-at your option, any later version of Perl 5 you may have available.
-
 =head1 SEE ALSO
 
 L<CPAN::Mini>
@@ -376,5 +354,18 @@ L<CPAN::WWW::Testers>
 
 CPAN Testers L<http://testers.cpan.org>
 
-=cut
+=head1 AUTHOR
 
+Robert Rothenberg <rrwo at cpan.org>
+
+Barbie <barbie@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2005-2014 by Robert Rothenberg.  All Rights Reserved.
+Copyright (C) 2014      by Barbie.
+
+This distribution is free software; you can redistribute it and/or
+modify it under the Artistic Licence v2.
+
+=cut
