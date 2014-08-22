@@ -1,4 +1,7 @@
 Changes
+INSTALL
+lib/CPAN/Mini/Tested.pm
+LICENSE
 Makefile.PL
 MANIFEST
 META.yml
@@ -8,4 +11,3 @@ t/mock.db
 t/pod-coverage.t
 t/pod.t
 t/prereqs.t
-lib/CPAN/Mini/Tested.pm
