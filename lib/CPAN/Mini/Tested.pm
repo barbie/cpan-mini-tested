@@ -22,14 +22,14 @@ use DBI;
 use DBD::SQLite                 1.00;
 use File::Basename              qw( basename );
 use File::Spec::Functions       qw( catfile );
-use LWP::Simple                 qw(mirror RC_OK RC_NOT_MODIFIED);
+use LWP::Simple                 qw( mirror RC_OK RC_NOT_MODIFIED );
 use Regexp::Assemble            0.06;
 
 ###########################################################################
 # Variables
 
-my $TESTDB  = 'testers.db';
-my $TESTURL = 'http://testers.cpan.org/testers.db';
+my $TESTDB  = 'cpanstats.db';
+my $TESTURL = 'http://devel.cpantesters.org/cpanstats.db';
 
 #--------------------------------------------------------------------------
 
@@ -55,9 +55,12 @@ sub mirror_indices {
     my $test_db_age = $self->{test_db_age};
     $test_db_age = 1, unless (defined $test_db_age);
 
-    if ( ($self->{force}) || (!-e $local_file) ||
-        (($test_db_age >= 0) &&
-	     (-e $local_file) && ((-M $local_file) > $test_db_age)) ){
+    if (    $self->{force}
+         || !-e $local_file
+         || (   $test_db_age >= 0 
+             && -e $local_file 
+             && -M $local_file > $test_db_age) ) {
+
         $self->trace($TESTDB);
         my $db_src = $self->{test_db_src} || $TESTURL;
         my $status = mirror($db_src, $local_file);
@@ -114,9 +117,9 @@ sub _connect {
     $self->{test_db_sth} =
         $self->_dbh->prepare( qq{
             SELECT COUNT(id) 
-              FROM reports
+              FROM cpanstats
              WHERE status='PASS' 
-               AND distribution=? 
+               AND dist=? 
                AND version=? 
                AND osname=?
     }) or die "Unable to create prepare statement: ", $self->_dbh->errstr;
@@ -231,17 +234,17 @@ CPAN::Mini::Tested - Create a CPAN mirror using modules with passing test report
   use CPAN::Mini::Tested;
 
   CPAN::Mini::Tested->update_mirror(
-   remote => "http://cpan.mirrors.comintern.su",
-   local  => "/usr/share/mirrors/cpan",
-   trace  => 1
+      remote => "http://cpan.mirrors.comintern.su",
+      local  => "/usr/share/mirrors/cpan",
+      trace  => 1
   );
 
 =head1 DESCRIPTION
 
-This module is a subclass of L<CPAN::Mini> which checks the CPAN
+This module is a subclass of L<CPAN::Mini> which checks a CPAN
 Testers database for passing tests of that distribution on your
-platform.  Distributions will only be downloaded if there are passing
-tests.
+platform. Distributions will only be downloaded if there have passing
+test reports.
 
 The major differences are that it will download the F<testers.db> file
 from the CPAN Testers web site when updating indices, and it will
@@ -255,7 +258,7 @@ The following additional options are supported:
 =item test_db_exceptions
 
 A Regexp or array of Regexps (or Regexp strings) of module paths that
-will be included in the mirror even if there are no passed tests for
+will be included in the mirror even if there are no PASS reports for
 them.
 
 If it is a code reference, then it refers to a subroutine which takes
@@ -278,12 +281,13 @@ Note that the testers database can be quite large (over 15MB).
 
 =item test_db_src
 
-When to download the latest copy of the testers database. Defaults to
-L<http://testers.cpan.org/testers.db>.
+Where to download the latest copy of the CPAN Testers database. Defaults to
+L<http://devel.cpantesters.org/cpanstats.db>, however please note this file 
+is no longer updated since April 2013.
 
 =item test_db_file
 
-The location of the local copy of the testers database. Defaults to
+The location of the local copy of the CPAN Testers database. Defaults to
 the root directory of C<local>.
 
 =item test_db_os
@@ -325,12 +329,12 @@ notes if it has not passed any tests.
 
 =item mirror_indices
 
-Downloads the latest F<testers.db> database file (if needed) and
+Downloads the latest F<cpanstats.db> database file (if needed) and
 connects to the database before it begins downloading indices.
 
 =item file_allowed
 
-Also notes if the file is the F<testers.db> databse file.
+Also notes if the file is the F<cpanstats.db> databse file.
 
 =item clean_unmirrored
 
