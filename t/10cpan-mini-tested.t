@@ -1,11 +1,10 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
+use strict;
 
 # TODO: test warning for setting test_db_arch
 
-use strict;
-use Test::More tests => 32;
-
-use_ok('CPAN::Mini::Tested', 0.20);
+use CPAN::Mini::Tested;
+use Test::More tests => 31;
 
 my $self = {
   test_db_file => './t/mock.db',
@@ -159,5 +158,3 @@ __END__
     ],
     test_db_age => -1,
    );
-
-
