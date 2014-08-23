@@ -1,5 +1,5 @@
 {
-    "name": "CPAN::Mini::Tested",
+    "name": "CPAN-Mini-Tested",
     "version": "0.22",
     "abstract": "Create a CPAN mirror using modules with passing test reports",
     "author": [
