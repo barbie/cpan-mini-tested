@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                   CPAN-Mini-Tested
-version:                0.22
+version:                0.23
 abstract:               Create a CPAN mirror using modules with passing test reports
 author:
   - Barbie <barbie@cpan.org>
@@ -34,7 +34,7 @@ build_requires:
 provides:
   CPAN::Mini::Tested:
     file: lib/CPAN/Mini/Tested.pm
-    version: 0.22
+    version: 0.23
 no_index:
   directory:
     - t

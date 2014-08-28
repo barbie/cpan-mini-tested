@@ -3,6 +3,7 @@ Revision history for CPAN-Mini-Tested
 
         Note: possible incompatabilities are marked with an asterisk -- '*'
 
+0.23    2014-08-28
         - new maintainer: Barbie
         - change file dates changed to meet W3CDTF standards.
         - removed Build.PL and SIGNATURE.
